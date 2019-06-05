@@ -9,6 +9,7 @@ type Test struct {
 	Method   string       `yaml:"method"`
 	Path     string       `yaml:"path"`
 	Query    string       `yaml:"query"`
+	Body     string       `yaml:"body"`
 	Response TestResponse `yaml:"response"`
 }
 

@@ -6,3 +6,11 @@ suite:
     response:
       status: 200
       body: '[{ "name": "My First todo", "isFinished": false }]'
+  - name: AddTodo
+    method: POST
+    path: /todos
+    query: ''
+    body: '{"name": "second todo"}'
+    response:
+      status: 201
+      body: '[{ "name": "My First todo", "isFinished": false }, { "name": "second todo", "isFinished": false }]'
