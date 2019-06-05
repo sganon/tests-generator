@@ -1,0 +1,7 @@
+suite:
+  - name: GetAllTodos
+    method: GET
+    path: /todos
+    query: ''
+    response:
+      status: 200

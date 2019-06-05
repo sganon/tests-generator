@@ -1,0 +1,28 @@
+package {{.Pkg}}
+
+// This file was generated via test-generator
+
+import (
+	"net/http"
+	"net/http/httptest"
+	"testing"
+)
+
+var h http.Handler = {{.HandlerFunc}}()
+
+{{range .Suite}}
+func Test{{.Name}}(t *testing.T) {
+
+	respRec := httptest.NewRecorder()
+	req, err := http.NewRequest("{{.Method}}", "{{.Path}}{{.Query}}", nil)
+	if err != nil {
+		t.Fatal("Creating '{{.Method}} {{.Path}}' request failed!")
+	}
+
+	h.ServeHTTP(respRec, req)
+
+	if respRec.Code != {{.Response.Status}} {
+		t.Fatal("Server error: Returned ", respRec.Code, " instead of ", {{.Response.Status}})
+	}
+}
+{{end}}
