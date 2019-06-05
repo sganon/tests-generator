@@ -5,3 +5,4 @@ suite:
     query: ''
     response:
       status: 200
+      body: '[{ "name": "My First todo", "isFinished": false }]'

@@ -13,5 +13,6 @@ type Test struct {
 }
 
 type TestResponse struct {
-	Status int `yaml:"status"`
+	Status int    `yaml:"status"`
+	Body   string `yaml:"body"`
 }
