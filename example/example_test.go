@@ -5,13 +5,14 @@ package example
 import (
 	"bytes"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"strings"
+	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/tdewolff/minify"
+	"github.com/tdewolff/minify/json"
 )
 
 var h http.Handler = NewRouter()
@@ -32,18 +33,19 @@ func TestGetAllTodos(t *testing.T) {
 	h.ServeHTTP(respRec, req)
 
 	assert.Equal(t, respRec.Code, 200, "GetAllTodos: unexpected response code")
-
-	b, err := ioutil.ReadAll(respRec.Body)
-	if err != nil {
-		t.Fatal("error reading response body", err)
+	
+	body := new(bytes.Buffer)
+	ref := new(bytes.Buffer)
+	m := minify.New()
+	m.AddFuncRegexp(regexp.MustCompile("[/+]json$"), json.Minify)
+	if err := m.Minify("application/json", body, respRec.Body); err != nil {
+		panic(err)
 	}
-	body := strings.ReplaceAll(string(b), " ", "")
-	body = strings.ReplaceAll(body, "\t", "")
-	body = strings.ReplaceAll(body, "\n", "")
+	if err := m.Minify("application/json", ref, bytes.NewBuffer([]byte(`[{ "name": "My First todo", "isFinished": false }]`))); err != nil {
+		panic(err)
+	}
 
-	ref := strings.ReplaceAll(`[{ "name": "My First todo", "isFinished": false }]`, " ", "")
-	ref = strings.ReplaceAll(ref, "\t", "")
-	ref = strings.ReplaceAll(ref, "\n", "")
+
 
 	assert.Equal(t, body, ref, "GetAllTodos: response body is not matching")
 }
@@ -63,18 +65,19 @@ func TestAddTodo(t *testing.T) {
 	h.ServeHTTP(respRec, req)
 
 	assert.Equal(t, respRec.Code, 201, "AddTodo: unexpected response code")
-
-	b, err := ioutil.ReadAll(respRec.Body)
-	if err != nil {
-		t.Fatal("error reading response body", err)
+	
+	body := new(bytes.Buffer)
+	ref := new(bytes.Buffer)
+	m := minify.New()
+	m.AddFuncRegexp(regexp.MustCompile("[/+]json$"), json.Minify)
+	if err := m.Minify("application/json", body, respRec.Body); err != nil {
+		panic(err)
 	}
-	body := strings.ReplaceAll(string(b), " ", "")
-	body = strings.ReplaceAll(body, "\t", "")
-	body = strings.ReplaceAll(body, "\n", "")
+	if err := m.Minify("application/json", ref, bytes.NewBuffer([]byte(`[{ "name": "My First todo", "isFinished": false }, { "name": "second todo", "isFinished": false }]`))); err != nil {
+		panic(err)
+	}
 
-	ref := strings.ReplaceAll(`[{ "name": "My First todo", "isFinished": false }, { "name": "second todo", "isFinished": false }]`, " ", "")
-	ref = strings.ReplaceAll(ref, "\t", "")
-	ref = strings.ReplaceAll(ref, "\n", "")
+
 
 	assert.Equal(t, body, ref, "AddTodo: response body is not matching")
 }
