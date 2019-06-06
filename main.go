@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
-	"text/template"
 
+	"github.com/dolmen-go/codegen"
 	"github.com/jpillora/opts"
 	"gopkg.in/yaml.v2"
 )
@@ -42,19 +41,10 @@ func main() {
 		Config: &c,
 	}
 
-	t, err := template.New("test").Parse(tmpl)
-	if err != nil {
-		log.Fatalf("error parsing template file: %v", err)
-	}
+	t := codegen.MustParse(tmpl)
 
-	f, err := os.Create(fmt.Sprintf("%s_test.go", td.Pkg))
-	if err != nil {
+	if err := t.CreateFile(fmt.Sprintf("%s_test.go", td.Pkg), td); err != nil {
 		log.Fatalf("error creating test file: %v", err)
-	}
-
-	err = t.Execute(f, td)
-	if err != nil {
-		log.Fatalf("error generating test: %v", err)
 	}
 }
 

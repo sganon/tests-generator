@@ -16,11 +16,10 @@ import (
 
 var h http.Handler = NewRouter()
 
-
 func TestGetAllTodos1(t *testing.T) {
 	var reqBody io.Reader
 	if `` != "" {
-		reqBody =  bytes.NewBuffer([]byte(``))
+		reqBody = bytes.NewBuffer([]byte(``))
 	}
 
 	respRec := httptest.NewRecorder()
@@ -44,7 +43,7 @@ func TestGetAllTodos1(t *testing.T) {
 func TestAddTodo1(t *testing.T) {
 	var reqBody io.Reader
 	if `{"name": "second todo"}` != "" {
-		reqBody =  bytes.NewBuffer([]byte(`{"name": "second todo"}`))
+		reqBody = bytes.NewBuffer([]byte(`{"name": "second todo"}`))
 	}
 
 	respRec := httptest.NewRecorder()
@@ -68,7 +67,7 @@ func TestAddTodo1(t *testing.T) {
 func TestGetAllTodos2(t *testing.T) {
 	var reqBody io.Reader
 	if `` != "" {
-		reqBody =  bytes.NewBuffer([]byte(``))
+		reqBody = bytes.NewBuffer([]byte(``))
 	}
 
 	respRec := httptest.NewRecorder()
@@ -92,7 +91,7 @@ func TestGetAllTodos2(t *testing.T) {
 func TestGetFirstTodo(t *testing.T) {
 	var reqBody io.Reader
 	if `` != "" {
-		reqBody =  bytes.NewBuffer([]byte(``))
+		reqBody = bytes.NewBuffer([]byte(``))
 	}
 
 	respRec := httptest.NewRecorder()
@@ -116,7 +115,7 @@ func TestGetFirstTodo(t *testing.T) {
 func TestGetUnknownTodo(t *testing.T) {
 	var reqBody io.Reader
 	if `` != "" {
-		reqBody =  bytes.NewBuffer([]byte(``))
+		reqBody = bytes.NewBuffer([]byte(``))
 	}
 
 	respRec := httptest.NewRecorder()
@@ -140,7 +139,7 @@ func TestGetUnknownTodo(t *testing.T) {
 func TestGetOneTodoWrongParams(t *testing.T) {
 	var reqBody io.Reader
 	if `` != "" {
-		reqBody =  bytes.NewBuffer([]byte(``))
+		reqBody = bytes.NewBuffer([]byte(``))
 	}
 
 	respRec := httptest.NewRecorder()
@@ -160,4 +159,3 @@ func TestGetOneTodoWrongParams(t *testing.T) {
 		assert.JSONEq(t, ``, string(b), "the response body doesn't match the expected one")
 	}
 }
-
