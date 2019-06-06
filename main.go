@@ -35,7 +35,6 @@ func main() {
 		log.Fatalf("error parsing specs: %v", err)
 	}
 
-	fmt.Printf("%+v", spec)
 	td := TemplateData{
 		Spec:        &spec,
 		Pkg:         "example",
