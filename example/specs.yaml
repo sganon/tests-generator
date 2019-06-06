@@ -1,16 +1,24 @@
 suite:
-  - name: GetAllTodos
+  - name: GetAllTodos1
     method: GET
     path: /todos
     query: ''
     response:
       status: 200
       body: '[{ "name": "My First todo", "isFinished": false }]'
-  - name: AddTodo
+  - name: AddTodo1
     method: POST
     path: /todos
     query: ''
     body: '{"name": "second todo"}'
     response:
       status: 201
+      body: '{ "name": "second todo", "isFinished": false }'
+  - name: GetAllTodos2
+    method: GET
+    path: /todos
+    query: ''
+    response:
+      status: 200
       body: '[{ "name": "My First todo", "isFinished": false }, { "name": "second todo", "isFinished": false }]'
+

@@ -47,6 +47,6 @@ func Test{{.Name}}(t *testing.T) {
 
 
 
-	assert.Equal(t, body, ref, "{{.Name}}: response body is not matching")
+	assert.Equal(t, ref, body,"{{.Name}}: response body is not matching")
 }
 {{end}}
