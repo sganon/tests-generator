@@ -66,14 +66,12 @@ package {{.Pkg}}
 import (
 	"bytes"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tdewolff/minify"
-	"github.com/tdewolff/minify/json"
 )
 
 var h http.Handler = {{.HandlerFunc}}()
@@ -95,20 +93,12 @@ func Test{{.Name}}(t *testing.T) {
 
 	assert.Equal(t, respRec.Code, {{.Response.Status}}, "{{.Name}}: unexpected response code")
 
-	body := new(bytes.Buffer)
-	ref := new(bytes.Buffer)
-	m := minify.New()
-	m.AddFuncRegexp(regexp.MustCompile("[/+]json$"), json.Minify)
-	if err := m.Minify("application/json", body, respRec.Body); err != nil {
-		panic(err)
+	b, err := ioutil.ReadAll(respRec.Body)
+	assert.NoError(t, err)
+
+	if string(b) != "" || ` + "`{{.Response.Body}}`" + ` != "" {
+		assert.JSONEq(t, ` + "`{{.Response.Body}}`" + `, string(b), "the response body doesn't match the expected one")
 	}
-	if err := m.Minify("application/json", ref, bytes.NewBuffer([]byte(` + "`{{.Response.Body}}`" + `))); err != nil {
-		panic(err)
-	}
-
-
-
-	assert.Equal(t, ref, body,"{{.Name}}: response body is not matching")
 }
 {{end}}
 `

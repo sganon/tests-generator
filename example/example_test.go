@@ -6,14 +6,12 @@ package example
 import (
 	"bytes"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tdewolff/minify"
-	"github.com/tdewolff/minify/json"
 )
 
 var h http.Handler = NewRouter()
@@ -35,20 +33,12 @@ func TestGetAllTodos1(t *testing.T) {
 
 	assert.Equal(t, respRec.Code, 200, "GetAllTodos1: unexpected response code")
 
-	body := new(bytes.Buffer)
-	ref := new(bytes.Buffer)
-	m := minify.New()
-	m.AddFuncRegexp(regexp.MustCompile("[/+]json$"), json.Minify)
-	if err := m.Minify("application/json", body, respRec.Body); err != nil {
-		panic(err)
+	b, err := ioutil.ReadAll(respRec.Body)
+	assert.NoError(t, err)
+
+	if string(b) != "" || `[{ "name": "My First todo", "isFinished": false }]` != "" {
+		assert.JSONEq(t, `[{ "name": "My First todo", "isFinished": false }]`, string(b), "the response body doesn't match the expected one")
 	}
-	if err := m.Minify("application/json", ref, bytes.NewBuffer([]byte(`[{ "name": "My First todo", "isFinished": false }]`))); err != nil {
-		panic(err)
-	}
-
-
-
-	assert.Equal(t, ref, body,"GetAllTodos1: response body is not matching")
 }
 
 func TestAddTodo1(t *testing.T) {
@@ -67,20 +57,12 @@ func TestAddTodo1(t *testing.T) {
 
 	assert.Equal(t, respRec.Code, 201, "AddTodo1: unexpected response code")
 
-	body := new(bytes.Buffer)
-	ref := new(bytes.Buffer)
-	m := minify.New()
-	m.AddFuncRegexp(regexp.MustCompile("[/+]json$"), json.Minify)
-	if err := m.Minify("application/json", body, respRec.Body); err != nil {
-		panic(err)
+	b, err := ioutil.ReadAll(respRec.Body)
+	assert.NoError(t, err)
+
+	if string(b) != "" || `{ "name": "second todo", "isFinished": false }` != "" {
+		assert.JSONEq(t, `{ "name": "second todo", "isFinished": false }`, string(b), "the response body doesn't match the expected one")
 	}
-	if err := m.Minify("application/json", ref, bytes.NewBuffer([]byte(`{ "name": "second todo", "isFinished": false }`))); err != nil {
-		panic(err)
-	}
-
-
-
-	assert.Equal(t, ref, body,"AddTodo1: response body is not matching")
 }
 
 func TestGetAllTodos2(t *testing.T) {
@@ -99,20 +81,12 @@ func TestGetAllTodos2(t *testing.T) {
 
 	assert.Equal(t, respRec.Code, 200, "GetAllTodos2: unexpected response code")
 
-	body := new(bytes.Buffer)
-	ref := new(bytes.Buffer)
-	m := minify.New()
-	m.AddFuncRegexp(regexp.MustCompile("[/+]json$"), json.Minify)
-	if err := m.Minify("application/json", body, respRec.Body); err != nil {
-		panic(err)
+	b, err := ioutil.ReadAll(respRec.Body)
+	assert.NoError(t, err)
+
+	if string(b) != "" || `[{ "name": "My First todo", "isFinished": false }, { "name": "second todo", "isFinished": false }]` != "" {
+		assert.JSONEq(t, `[{ "name": "My First todo", "isFinished": false }, { "name": "second todo", "isFinished": false }]`, string(b), "the response body doesn't match the expected one")
 	}
-	if err := m.Minify("application/json", ref, bytes.NewBuffer([]byte(`[{ "name": "My First todo", "isFinished": false }, { "name": "second todo", "isFinished": false }]`))); err != nil {
-		panic(err)
-	}
-
-
-
-	assert.Equal(t, ref, body,"GetAllTodos2: response body is not matching")
 }
 
 func TestGetFirstTodo(t *testing.T) {
@@ -131,20 +105,12 @@ func TestGetFirstTodo(t *testing.T) {
 
 	assert.Equal(t, respRec.Code, 200, "GetFirstTodo: unexpected response code")
 
-	body := new(bytes.Buffer)
-	ref := new(bytes.Buffer)
-	m := minify.New()
-	m.AddFuncRegexp(regexp.MustCompile("[/+]json$"), json.Minify)
-	if err := m.Minify("application/json", body, respRec.Body); err != nil {
-		panic(err)
+	b, err := ioutil.ReadAll(respRec.Body)
+	assert.NoError(t, err)
+
+	if string(b) != "" || `{ "name": "My First todo", "isFinished": false }` != "" {
+		assert.JSONEq(t, `{ "name": "My First todo", "isFinished": false }`, string(b), "the response body doesn't match the expected one")
 	}
-	if err := m.Minify("application/json", ref, bytes.NewBuffer([]byte(`{ "name": "My First todo", "isFinished": false }`))); err != nil {
-		panic(err)
-	}
-
-
-
-	assert.Equal(t, ref, body,"GetFirstTodo: response body is not matching")
 }
 
 func TestGetUnknownTodo(t *testing.T) {
@@ -163,20 +129,12 @@ func TestGetUnknownTodo(t *testing.T) {
 
 	assert.Equal(t, respRec.Code, 404, "GetUnknownTodo: unexpected response code")
 
-	body := new(bytes.Buffer)
-	ref := new(bytes.Buffer)
-	m := minify.New()
-	m.AddFuncRegexp(regexp.MustCompile("[/+]json$"), json.Minify)
-	if err := m.Minify("application/json", body, respRec.Body); err != nil {
-		panic(err)
+	b, err := ioutil.ReadAll(respRec.Body)
+	assert.NoError(t, err)
+
+	if string(b) != "" || `` != "" {
+		assert.JSONEq(t, ``, string(b), "the response body doesn't match the expected one")
 	}
-	if err := m.Minify("application/json", ref, bytes.NewBuffer([]byte(``))); err != nil {
-		panic(err)
-	}
-
-
-
-	assert.Equal(t, ref, body,"GetUnknownTodo: response body is not matching")
 }
 
 func TestGetOneTodoWrongParams(t *testing.T) {
@@ -195,19 +153,11 @@ func TestGetOneTodoWrongParams(t *testing.T) {
 
 	assert.Equal(t, respRec.Code, 400, "GetOneTodoWrongParams: unexpected response code")
 
-	body := new(bytes.Buffer)
-	ref := new(bytes.Buffer)
-	m := minify.New()
-	m.AddFuncRegexp(regexp.MustCompile("[/+]json$"), json.Minify)
-	if err := m.Minify("application/json", body, respRec.Body); err != nil {
-		panic(err)
+	b, err := ioutil.ReadAll(respRec.Body)
+	assert.NoError(t, err)
+
+	if string(b) != "" || `` != "" {
+		assert.JSONEq(t, ``, string(b), "the response body doesn't match the expected one")
 	}
-	if err := m.Minify("application/json", ref, bytes.NewBuffer([]byte(``))); err != nil {
-		panic(err)
-	}
-
-
-
-	assert.Equal(t, ref, body,"GetOneTodoWrongParams: response body is not matching")
 }
 
