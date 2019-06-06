@@ -8,7 +8,7 @@ jobs:
     working_directory: /go/src/github.com/sganon/{{REPO_NAME}}
     steps:
       - checkout
-      - run: go build && ./tests-generator --specs-file ./example/specs.yaml && go test -v ./example
+      - run: go build && ./tests-generator --specs-file ./example/specs.yaml --pkg example --handler-func NewRouter && go test -v ./example
 
 workflows:
   version: 2

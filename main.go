@@ -19,7 +19,9 @@ type TemplateData struct {
 
 func main() {
 	type config struct {
-		SpecsFile string `opts:"help=specify where is the tests spec file"`
+		SpecsFile   string `opts:"help=specify where is the tests spec file"`
+		Pkg         string `opts:"help=specify for which package the test needs to be generated"`
+		HandlerFunc string `opts:"help=which function returns the handler to test"`
 	}
 	c := config{}
 	opts.Parse(&c)
@@ -37,8 +39,8 @@ func main() {
 
 	td := TemplateData{
 		Spec:        &spec,
-		Pkg:         "example",
-		HandlerFunc: "NewRouter",
+		Pkg:         c.Pkg,
+		HandlerFunc: c.HandlerFunc,
 	}
 
 	t, err := template.ParseFiles("./tests.template")
