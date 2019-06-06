@@ -1,0 +1,17 @@
+version: 2
+jobs:
+  test-gen-example:
+    docker:
+      - image: circleci/golang:1.12
+    environment:
+      - GO111MODULE: "on"
+    working_directory: /go/src/github.com/sganon/{{REPO_NAME}}
+    steps:
+      - checkout
+      - run: go build && ./tests-generator --specs-file ./example/specs.yaml && go test -v ./example
+
+workflows:
+  version: 2
+  pipeline:
+    jobs:
+      - test-gen-example
