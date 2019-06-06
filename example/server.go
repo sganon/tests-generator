@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"strconv"
+
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -39,6 +41,10 @@ func NewRouter() http.Handler {
 		w.Write(b)
 	}
 
+	parseIndex := func(p httprouter.Params) (int, error) {
+		return strconv.Atoi(p.ByName("index"))
+	}
+
 	router.GET("/todos", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		returnTodos(w)
 	})
@@ -50,6 +56,20 @@ func NewRouter() http.Handler {
 		todos = append(todos, td)
 		w.WriteHeader(201)
 		returnTodo(w, td)
+	})
+
+	router.GET("/todos/:index", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		idx, err := parseIndex(p)
+		if err != nil {
+			w.WriteHeader(400)
+			return
+		}
+		if idx < 0 || idx > len(todos) {
+			w.WriteHeader(404)
+			return
+		}
+		w.WriteHeader(200)
+		returnTodo(w, todos[idx])
 	})
 
 	return router

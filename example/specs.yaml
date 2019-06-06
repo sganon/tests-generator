@@ -21,4 +21,23 @@ suite:
     response:
       status: 200
       body: '[{ "name": "My First todo", "isFinished": false }, { "name": "second todo", "isFinished": false }]'
+  - name: GetFirstTodo
+    method: GET
+    path: /todos/0
+    query: ''
+    response:
+      status: 200
+      body: '{ "name": "My First todo", "isFinished": false }'
+  - name: GetUnknownTodo
+    method: GET
+    path: /todos/42
+    query: ''
+    response:
+      status: 404
+  - name: GetOneTodoWrongParams
+    method: GET
+    path: /todos/fdsd
+    query: ''
+    response:
+      status: 400
 
