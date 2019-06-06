@@ -1,3 +1,4 @@
+//go:generate tests-generator --specs-file ./specs.yaml --pkg example --handler-func NewRouter
 package example
 
 // This file was generated via test-generator
@@ -33,7 +34,7 @@ func TestGetAllTodos1(t *testing.T) {
 	h.ServeHTTP(respRec, req)
 
 	assert.Equal(t, respRec.Code, 200, "GetAllTodos1: unexpected response code")
-	
+
 	body := new(bytes.Buffer)
 	ref := new(bytes.Buffer)
 	m := minify.New()
@@ -65,7 +66,7 @@ func TestAddTodo1(t *testing.T) {
 	h.ServeHTTP(respRec, req)
 
 	assert.Equal(t, respRec.Code, 201, "AddTodo1: unexpected response code")
-	
+
 	body := new(bytes.Buffer)
 	ref := new(bytes.Buffer)
 	m := minify.New()
@@ -97,7 +98,7 @@ func TestGetAllTodos2(t *testing.T) {
 	h.ServeHTTP(respRec, req)
 
 	assert.Equal(t, respRec.Code, 200, "GetAllTodos2: unexpected response code")
-	
+
 	body := new(bytes.Buffer)
 	ref := new(bytes.Buffer)
 	m := minify.New()
@@ -129,7 +130,7 @@ func TestGetFirstTodo(t *testing.T) {
 	h.ServeHTTP(respRec, req)
 
 	assert.Equal(t, respRec.Code, 200, "GetFirstTodo: unexpected response code")
-	
+
 	body := new(bytes.Buffer)
 	ref := new(bytes.Buffer)
 	m := minify.New()
@@ -161,7 +162,7 @@ func TestGetUnknownTodo(t *testing.T) {
 	h.ServeHTTP(respRec, req)
 
 	assert.Equal(t, respRec.Code, 404, "GetUnknownTodo: unexpected response code")
-	
+
 	body := new(bytes.Buffer)
 	ref := new(bytes.Buffer)
 	m := minify.New()
@@ -193,7 +194,7 @@ func TestGetOneTodoWrongParams(t *testing.T) {
 	h.ServeHTTP(respRec, req)
 
 	assert.Equal(t, respRec.Code, 400, "GetOneTodoWrongParams: unexpected response code")
-	
+
 	body := new(bytes.Buffer)
 	ref := new(bytes.Buffer)
 	m := minify.New()

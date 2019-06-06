@@ -19,8 +19,18 @@ suite:
 
 To be able to generate test your package you need to have a function returning the `http.Handler` to test.
 
+Assuming this function is called `NewRouter`, is in the `api` package, and your specs file is `api/specs.yaml`, create the file `api/api_test.go` with content:
+```golang
+//go:generate tests-generator --specs-file ./specs.yaml --pkg api --handler-func NewRouter
+package api
+```
+
+Then simply go in `api` and run `go generate`.
+
+
 ## Todos
-- [ ] Better handling of target package
+- [x] Better handling of target package (Use of go generate kinda handle that)
+- [ ] Pass parameters to handler func
 - [ ] Handles other types of body than `application/json`
 - [ ] Use openapi parser to define response/request bodies
 - [ ] Give option to compare response to openapi spec
